@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASD Screening Tool | Early Detection</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5ae0;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #4a6cf7 0%, #6c5ce7 100%);
+            --gradient-light: linear-gradient(135deg, #6a82fb 0%, #7b68ee 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #eef1ff 100%);
+            font-family: 'Open Sans', sans-serif;
+            color: #444;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin-top: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            background: var(--gradient);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--radius) var(--radius) 0 0 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%);
+        }
+
+        .card-body {
+            padding: 30px;
+            background-color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #e1e5ee;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f0f4ff;
+            border: 1px solid #e1e5ee;
+            border-radius: 10px 0 0 10px;
+            color: var(--primary);
+        }
+
+        .btn-predict {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 108, 247, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-predict:hover {
+            background: var(--gradient-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 108, 247, 0.4);
+        }
+
+        .btn-predict:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .result p {
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .result-asd {
+            border-left-color: #ff6b6b;
+            background: linear-gradient(to right, #fff5f5, white);
+        }
+
+        .result-td {
+            border-left-color: var(--success);
+            background: linear-gradient(to right, #f0fff4, white);
+        }
+
+        .result-explanation {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .result-explanation h5 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .result-explanation p {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .info-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .info-item i {
+            color: var(--primary);
+            margin-right: 12px;
+            margin-top: 3px;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Autism Detection System</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-link" href="{{ url_for('predict') }}">Image Prediction</a>
+                <a class="nav-link active" href="{{ url_for('predict2') }}">Eye-Tracking Prediction</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-brain me-2"></i>ASD Screening Tool</h1>
+            <p>This tool helps identify potential indicators of Autism Spectrum Disorder based on behavioral patterns.
+                Please provide accurate information for the most reliable results.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-clipboard-list me-2"></i>Behavioral Assessment Form</h4>
+            </div>
+            <div class="card-body">
+                <form action="/predict2" method="POST">
+                    <div class="row">
+    {% for col in features %}
+        {# Filter to show only the Top 5 most important features #}
+        {% if col in ['Pupil Diameter Right [mm]', 'Pupil Diameter Left [mm]', 'Gaze Vector Right Y', 'Gaze Vector Left Y', 'Point of Regard Right X [px]'] %}
+            
+            <div class="col-md-6 mb-4">
+                <label class="form-label">
+                    <span class="feature-icon" style="background: var(--primary); color: white;">
+                        <i class="fas fa-star"></i>
+                    </span>
+                    <strong>{{ col }}</strong>
+                </label>
+                <div class="input-group">
+                    <input type="text" name="{{ col }}" class="form-control border-primary shadow-sm" required
+                        placeholder="Enter value">
+                </div>
+            </div>
+
+        {% else %}
+            
+            {# This ensures your backend doesn't crash by sending a default 0 #}
+            <input type="hidden" name="{{ col }}" value="0">
+            
+        {% endif %}
+    {% endfor %}
+</div>
+
+                    <button type="submit" class="btn-predict">
+                        <i class="fas fa-search me-2"></i>Analyze Results
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="result {% if 'ASD' in result %}result-asd{% else %}result-td{% endif %}">
+            <p><i
+                    class="fas fa-{% if 'ASD' in result %}exclamation-triangle{% else %}check-circle{% endif %} me-2"></i>{{
+                result }}</p>
+
+            <div class="result-explanation">
+                {% if 'ASD' in result %}
+                <h5>Understanding Autism Spectrum Disorder (ASD)</h5>
+                <p><strong>Autism Spectrum Disorder (ASD)</strong> is a neurodevelopmental condition characterized by
+                    challenges with social communication, social interaction, and restricted or repetitive behaviors.
+                    The term "spectrum" reflects the wide variation in challenges and strengths possessed by each person
+                    with autism.</p>
+                <p>Common characteristics may include:</p>
+                <ul>
+                    <li>Difficulties with social communication and interaction</li>
+                    <li>Restricted or repetitive behaviors and interests</li>
+                    <li>Sensory sensitivities</li>
+                    <li>Different ways of learning, moving, or paying attention</li>
+                </ul>
+                <p><em>Note: This screening result suggests possible indicators of ASD. Please consult with healthcare
+                        professionals for a comprehensive evaluation and diagnosis.</em></p>
+                {% else %}
+                <h5>Understanding Typically Developing (TD)</h5>
+                <p><strong>Typically Developing (TD)</strong> refers to individuals who are following the expected
+                    patterns of development in areas such as social skills, communication, behavior, and cognitive
+                    abilities.</p>
+                <p>Key aspects of typical development include:</p>
+                <ul>
+                    <li>Age-appropriate social communication skills</li>
+                    <li>Flexible thinking and behavior patterns</li>
+                    <li>Expected developmental milestones in language, social, and cognitive domains</li>
+                    <li>Typical sensory processing and responses</li>
+                </ul>
+                <p><em>Note: This screening result suggests development is progressing as expected. If you have any
+                        concerns about development, consulting with a professional is always recommended.</em></p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="info-section">
+            <h3><i class="fas fa-info-circle me-2"></i>Important Information</h3>
+            <div class="info-item">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                    <strong>Disclaimer:</strong> This tool is for screening purposes only and does not provide a medical
+                    diagnosis.
+                    Always consult with healthcare professionals for accurate assessment.
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <strong>Privacy:</strong> Your data is processed securely and is not stored after the analysis is
+                    complete.
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-hand-holding-heart"></i>
+                <div>
+                    <strong>Support:</strong> If you have concerns about ASD, reach out to healthcare providers
+                    specializing in developmental disorders.
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 ASD Screening Tool | Designed for Early Detection and Support</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

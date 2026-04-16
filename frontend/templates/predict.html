@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prediction - Autism Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #00a8ff;
+            --accent-color: #f0f3f7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --danger-color: #dc3545;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+            --bg-light: #ffffff;
+            
+        }
+
+        body {
+            background: var(--bg-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            margin: 0 8px;
+            padding: 8px 16px !important;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .user-welcome {
+            color: white;
+            font-weight: 500;
+            margin-right: 15px;
+        }
+
+        /* Hero Section */
+        .predict-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .predict-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        /* Main Content */
+        .section-padding {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        /* Upload Card */
+        .upload-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .upload-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: var(--bg-light);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+
+        .btn-upload:disabled {
+            background: #cbd5e0;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Preview Section */
+        .preview-container {
+            margin-top: 30px;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .preview-size {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Results Section */
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .result-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .result-autistic .result-icon {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+        }
+
+        .result-non-autistic .result-icon {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-autistic .result-title {
+            color: var(--danger-color);
+        }
+
+        .result-non-autistic .result-title {
+            color: var(--success-color);
+        }
+
+        .result-confidence {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .confidence-bar {
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+/* Vibrant Red Highlight for Autistic Result */
+        .result-autistic .confidence-fill {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c); /* Bright, warm red */
+            box-shadow: 0 0 10px rgba(255, 65, 108, 0.4); /* Glow for screen */
+            border: 1.5px solid #b00020; /* Darker edge for print definition */
+        }
+
+        /* Vibrant Green Highlight for Non-Autistic Result */
+        .result-non-autistic .confidence-fill {
+            background: linear-gradient(90deg, #00f260, #0575e6); /* High-energy teal-green */
+            box-shadow: 0 0 10px rgba(0, 242, 96, 0.4); 
+            border: 1.5px solid #1b5e20;
+        }
+
+        .result-details {
+            margin-top: 25px;
+            text-align: left;
+            padding: 20px;
+            background: #ffffff; /* Keep background pure white */
+            border-radius: 8px;
+            border: 1px solid #eee; /* Very subtle border for structure */
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .detail-value {
+            color: var(--text-light);
+        }
+
+        .btn-new-prediction {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .btn-new-prediction:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(102, 126, 234, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Model Info */
+        .model-info {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .model-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 40px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .tip-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .tip-content h5 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .tip-content p {
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .upload-card,
+            .results-card {
+                padding: 25px;
+            }
+        }
+
+        /* Flash messages */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-brain me-2"></i>AutismDetect AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('models') }}">Models</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('predict') }}">Image Prediction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('predict2') }}">Eye-Tracking Prediction</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    {% if 'user_id' in session %}
+                    <span class="user-welcome">Welcome, {{ session.get('user_name', 'User') }}</span>
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                    {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-link" href="{{ url_for('registration') }}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="predict-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <span class="hero-badge">
+                            <i class="fas fa-camera me-2"></i>AI-Powered Detection
+                        </span>
+                        <h1 class="hero-title">Autism Spectrum Detection</h1>
+                        <p class="hero-subtitle">
+                            Upload a facial image and our advanced AI will analyze facial expressions
+                            to detect potential signs of autism spectrum disorder with 81.67% accuracy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+                    <!-- Upload Section -->
+                    <div class="upload-card fade-in">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h2 class="section-title text-center">Upload Facial Image</h2>
+                        <p class="section-subtitle text-center">
+                            Select a clear, front-facing facial photograph for analysis
+                        </p>
+
+                        <form id="uploadForm" method="POST" action="{{ url_for('predict') }}"
+                            enctype="multipart/form-data">
+                            <div class="upload-area" id="uploadArea">
+                                <i class="fas fa-images"></i>
+                                <h4 class="upload-text">Drag & Drop your image here</h4>
+                                <p class="upload-hint">or click to browse files</p>
+                                <p class="upload-hint">Supported formats: JPG, PNG, JPEG (Max 16MB)</p>
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" name="file"
+                                accept=".jpg,.jpeg,.png,.gif" required>
+                            <button type="submit" class="btn-upload" id="analyzeBtn">
+                                <i class="fas fa-brain me-2"></i> Analyze Image
+                            </button>
+                        </form>
+
+                        <!-- Preview Section -->
+                        {% if filename %}
+                        <div class="preview-container" id="previewContainer">
+                            <div class="preview-card">
+                                <img id="previewImage" class="preview-image"
+                                    src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Preview">
+                                <h5 id="previewName" class="preview-name">{{ filename }}</h5>
+                                <button class="btn btn-outline-secondary mt-2" onclick="resetForm()">
+                                    <i class="fas fa-exchange-alt me-2"></i> Change Image
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Results Section -->
+                    {% if prediction_result %}
+                    <div
+                        class="results-card {% if prediction_result == 'Autistic Traits Detected' %}result-autistic{% else %}result-non-autistic{% endif %} fade-in">
+                        <div class="result-icon">
+                            <i
+                                class="{% if prediction_result == 'Autistic Traits Detected' %}fas fa-exclamation-triangle{% else %}fas fa-check-circle{% endif %}"></i>
+                        </div>
+                        <h2 class="result-title">
+                            {% if prediction_result == 'Autistic Traits Detected' %}
+                            Autistic Traits Detected
+                            {% else %}
+                            No Autistic Traits Detected
+                            {% endif %}
+                        </h2>
+                        <p>
+                            {% if prediction_result == 'Autistic Traits Detected' %}
+                            Our AI has detected potential signs of autism spectrum disorder. Please consult with a
+                            healthcare professional for a comprehensive evaluation.
+                            {% else %}
+                            Our AI analysis did not detect significant signs of autism spectrum disorder based on the
+                            provided image.
+                            {% endif %}
+                        </p>
+
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Model Used</span>
+                                <span class="detail-value">MobileNet (v2.1)</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Prediction Result</span>
+                                <span class="detail-value">
+                                    {% if prediction_result == 'Autistic Traits Detected' %}
+                                    <span class="text-danger">Autistic</span>
+                                    {% else %}
+                                    <span class="text-success">Non-Autistic</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <button class="btn-new-prediction" onclick="resetForm()">
+                                    <i class="fas fa-redo me-2"></i> New Analysis
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Model Information -->
+                    <div class="model-info fade-in">
+                        <span class="model-badge">
+                            <i class="fas fa-robot me-1"></i> Active Model
+                        </span>
+                        <h4>MobileNet Architecture</h4>
+                        <p class="mb-2">
+                            <strong>Accuracy:</strong> <span class="text-success">81.67%</span> |
+                            <strong>Precision:</strong> 79.14% |
+                            <strong>Recall:</strong> 86.00%
+                        </p>
+                        <p class="mb-0 text-muted">
+                            Our system uses a pre-trained MobileNet model fine-tuned specifically for autism detection
+                            through facial expression analysis.
+                        </p>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="tips-section fade-in">
+                        <h3 class="section-title">For Best Results</h3>
+                        <p class="section-subtitle">Follow these guidelines to ensure accurate analysis</p>
+
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Good Lighting</h5>
+                                <p>Ensure the face is well-lit with natural or soft artificial light, avoiding harsh
+                                    shadows.</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Front-Facing Position</h5>
+                                <p>The face should be directly facing the camera with a neutral expression for optimal
+                                    analysis.</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Clear Image Quality</h5>
+                                <p>Use high-resolution images where facial features are clearly visible and in focus.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h5>Eyes Visible</h5>
+                                <p>Ensure both eyes are open and clearly visible without obstructions like glasses or
+                                    hair.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>AutismDetect AI</h5>
+                    <p style="color: rgba(255,255,255,0.7);">
+                        Advanced AI-powered system for early autism spectrum disorder detection
+                        through facial expression analysis.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('about') }}">About</a></li>
+                        <li><a href="{{ url_for('models') }}">Models</a></li>
+                        <li><a href="{{ url_for('predict') }}">Prediction</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h5>Contact Info</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope me-2"></i> support@autismdetect.ai</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Healthcare AI Research Center</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 AutismDetect AI. All rights reserved. | AI-Powered Autism Detection System</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        // Scroll animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+
+        // Initial check
+        fadeInOnScroll();
+
+        // Check on scroll
+        window.addEventListener('scroll', fadeInOnScroll);
+
+        // Upload area click event
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            uploadArea.classList.add('dragover');
+        }
+
+        function unhighlight() {
+            uploadArea.classList.remove('dragover');
+        }
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // File input change event
+        fileInput.addEventListener('change', function () {
+            handleFiles(this.files);
+        });
+
+        // Handle selected files
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+
+                // Validate file type
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please select a valid image file (JPG, PNG, GIF)');
+                    return;
+                }
+
+                // Validate file size (16MB max)
+                if (file.size > 16 * 1024 * 1024) {
+                    alert('File size exceeds 16MB limit. Please choose a smaller file.');
+                    return;
+                }
+
+                // Enable the analyze button
+                analyzeBtn.disabled = false;
+
+                // Auto-submit the form when file is selected
+                document.getElementById('uploadForm').submit();
+            }
+        }
+
+        // Reset form for new prediction
+        function resetForm() {
+            fileInput.value = '';
+            window.location.href = "{{ url_for('predict') }}";
+        }
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Autism Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4cd964;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .registration-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .registration-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .registration-left {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .registration-right {
+            padding: 50px;
+        }
+        
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .form-title {
+            color: var(--text-dark);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(102, 126, 234, 0.3);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-light);
+        }
+        
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .progress-bar {
+            height: 5px;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        
+        .password-strength-weak {
+            background-color: #f56565;
+            width: 25%;
+        }
+        
+        .password-strength-medium {
+            background-color: #ed8936;
+            width: 50%;
+        }
+        
+        .password-strength-strong {
+            background-color: #48bb78;
+            width: 75%;
+        }
+        
+        .password-strength-very-strong {
+            background-color: #38a169;
+            width: 100%;
+        }
+        
+        @media (max-width: 992px) {
+            .registration-left {
+                padding: 30px;
+            }
+            
+            .registration-right {
+                padding: 30px;
+            }
+        }
+        
+        .floating-label {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .floating-input {
+            font-size: 16px;
+            padding: 20px 15px;
+            display: block;
+            width: 100%;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: transparent;
+            transition: all 0.3s;
+        }
+        
+        .floating-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .floating-label label {
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: normal;
+            position: absolute;
+            pointer-events: none;
+            left: 15px;
+            top: 20px;
+            transition: 0.2s ease all;
+        }
+        
+        .floating-input:focus ~ label,
+        .floating-input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: var(--primary-color);
+            background: white;
+            padding: 0 5px;
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .floating-input.with-icon {
+            padding-left: 45px;
+        }
+        
+        .floating-label label.with-icon {
+            left: 45px;
+        }
+        
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Alert Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <div class="registration-container">
+        <div class="registration-card">
+            <div class="row g-0">
+                <!-- Left Side - Welcome Message -->
+                <div class="col-lg-6 d-none d-lg-block">
+                    <div class="registration-left">
+                        <h1 class="welcome-title">Join Our Community</h1>
+                        <p class="welcome-text">
+                            Create an account to access our advanced autism detection system powered by AI and deep learning technology.
+                        </p>
+                        
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h5>AI-Powered Analysis</h5>
+                                    <p>Advanced MobileNet architecture</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <h5>Secure & Private</h5>
+                                    <p>Your data is always protected</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <h5>Accurate Results</h5>
+                                    <p>81.67% accuracy rate</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div>
+                                    <h5>Prediction History</h5>
+                                    <p>Track all your previous analyses</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Registration Form -->
+                <div class="col-lg-6">
+                    <div class="registration-right">
+                        <h2 class="form-title">Create Account</h2>
+                        <p class="form-subtitle">Fill in your details to get started</p>
+                        
+                        <form method="POST" action="{{ url_for('registration') }}" id="registrationForm">
+                            <!-- Name Field -->
+                            <div class="floating-label">
+                                <i class="fas fa-user form-icon"></i>
+                                <input type="text" class="floating-input with-icon" id="name" name="name" placeholder=" " value="{{ request.form.name if request.form }}" required>
+                                <label for="name" class="with-icon">Full Name</label>
+                            </div>
+                            
+                            <!-- Email Field -->
+                            <div class="floating-label">
+                                <i class="fas fa-envelope form-icon"></i>
+                                <input type="email" class="floating-input with-icon" id="email" name="email" placeholder=" " value="{{ request.form.email if request.form }}" required>
+                                <label for="email" class="with-icon">Email Address</label>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="floating-label">
+                                <i class="fas fa-lock form-icon"></i>
+                                <input type="password" class="floating-input with-icon password-input" id="password" name="password" placeholder=" " required>
+                                <label for="password" class="with-icon">Password</label>
+                                <button type="button" class="password-toggle" id="passwordToggle">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="progress-bar">
+                                    <div class="progress" id="passwordStrength"></div>
+                                </div>
+                                <small class="text-muted" id="passwordHint">Use 8+ characters with mix of letters, numbers & symbols</small>
+                            </div>
+                            
+                            <!-- Confirm Password Field -->
+                            <div class="floating-label">
+                                <i class="fas fa-lock form-icon"></i>
+                                <input type="password" class="floating-input with-icon" id="confirmpassword" name="confirmpassword" placeholder=" " required>
+                                <label for="confirmpassword" class="with-icon">Confirm Password</label>
+                            </div>
+                            
+                            <!-- Address Field -->
+                            <div class="floating-label">
+                                <i class="fas fa-home form-icon"></i>
+                                <textarea class="floating-input with-icon" id="address" name="address" placeholder=" " rows="2" required>{{ request.form.address if request.form }}</textarea>
+                                <label for="address" class="with-icon">Address</label>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-register" id="registerButton">
+                                <i class="fas fa-user-plus me-2"></i> Create Account
+                            </button>
+                            
+                            <!-- Login Link -->
+                            <div class="login-link">
+                                Already have an account? <a href="{{ url_for('login') }}">Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password visibility toggle
+        document.getElementById('passwordToggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrength');
+            const hint = document.getElementById('passwordHint');
+            
+            // Reset
+            strengthBar.className = 'progress';
+            hint.textContent = 'Use 8+ characters with mix of letters, numbers & symbols';
+            
+            if (password.length === 0) {
+                return;
+            }
+            
+            // Calculate strength
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update visual indicator
+            if (strength <= 2) {
+                strengthBar.classList.add('password-strength-weak');
+                hint.textContent = 'Weak password - try adding more characters and variety';
+            } else if (strength <= 4) {
+                strengthBar.classList.add('password-strength-medium');
+                hint.textContent = 'Medium strength password - almost there!';
+            } else if (strength <= 5) {
+                strengthBar.classList.add('password-strength-strong');
+                hint.textContent = 'Strong password - good job!';
+            } else {
+                strengthBar.classList.add('password-strength-very-strong');
+                hint.textContent = 'Very strong password - excellent!';
+            }
+        });
+        
+        // Form validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmpassword').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            
+            // Basic validation
+            if (!name || !email || !password || !confirmPassword || !address) {
+                e.preventDefault();
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match! Please check your password confirmation.');
+                document.getElementById('confirmpassword').focus();
+                return;
+            }
+            
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters long!');
+                document.getElementById('password').focus();
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('registerButton');
+            submitBtn.classList.add('btn-loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating Account...';
+        });
+        
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
